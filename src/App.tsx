@@ -1,45 +1,37 @@
 import React, { useState } from 'react'
-import logo from './logo.svg'
-import './App.css'
+import { ethers } from 'ethers'
+import Greeter from './artifacts/contracts/Greeter.sol/Greeter.json'
 
-function App() {
-  const [count, setCount] = useState(0)
+declare const window: any
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
-    </div>
-  )
+const greeterAddress = '0x5fbdb2315678afecb367f032d93f642f64180aa3'
+
+const App = () => {
+  const [greeting, setGreetingValue] = useState()
+
+  const requestAccount = async () => {}
+
+  const fetchGreeting = async () => {
+    if (typeof window.ethereum !== 'undefined') {
+      const provider = new ethers.providers.Web3Provider(window.ethereum)
+      const contract = new ethers.Contract(
+        greeterAddress,
+        Greeter.abi,
+        provider
+      )
+
+      try {
+        const data = await contract.greet()
+        console.log('data: ', data)
+      } catch (err) {
+        console.log('Error: ', err.message)
+      }
+    }
+  }
+
+  const setGreeting = async () => {}
+
+  return <p>hi</p>
 }
 
 export default App
